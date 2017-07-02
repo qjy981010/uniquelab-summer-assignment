@@ -10,5 +10,11 @@ int main() {
 		q.push(i);
 	}
 	q.display();
+	My_vector vec;
+	for (int i = 0; i < 10; i++) {
+		vec.push_back(q.top());
+		q.pop();
+	}
+	vec.display();
 	return 0;
 }

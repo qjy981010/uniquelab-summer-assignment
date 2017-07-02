@@ -11,17 +11,20 @@ void Priority_queue::push(const T& val) {
 	}
 }
 
+
 void Priority_queue::pop() {
+
 	size_t size_ = --v.front();
 	if ( size_ < 0 ) {
 		v.front()++;
 		cerr << "ERROR: Nothing in the Priority queue!";
 	}
+
 	*( v.begin() + 1 ) = v.back();
 	v.pop_back();
 	int i = 1;
-	if ( size_ > 3 )
-		for (int j = v[2] > v[3] ? 2 : 3; j<=size_ && i<size_ && v[j]<v[i]; i = j, j = v[i>>1] > v[(i>>1)+1] ? i>>1 : (i>>1)+1) {
+	if ( size_ >= 3 )
+		for (int j = v[2] > v[3] ? 2 : 3; j<=size_ && i<size_ && v[j]>v[i]; i = j, j = v[i<<1] > v[(i<<1)+1] ? i<<1 : (i<<1)+1) {
 			swap(v[i], v[j]);
 		}
 	else if (size_ == 2)
