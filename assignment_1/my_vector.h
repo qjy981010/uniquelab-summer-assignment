@@ -22,40 +22,14 @@ public:
 	size_type size() const { return size_type(end()-begin()); }
 	bool empty() const {return begin() == end(); }
 	reference operator[](size_type n) { return *(begin() + n); }
-	My_vector() {
-		start = new T[16];
-		finish = start;
-		end_of_storage = start + 16;
-	}
+	My_vector();
 	~My_vector() { delete []start; }
 	reference front() { return *begin(); }
 	reference back() { return *(end()-1); }
-	void push_back(const T& x) {
-		if (finish != end_of_storage) {
-			*finish = x;
-			finish++;
-		}
-		else
-			insert_aux(x);
-	}
+	void push_back(const T& x)
 	void pop_back() { finish--; }
-	iterator erase(iterator position) {
-		for (; position + 1 != finish; position++)
-			*position = *( position + 1 );
-		finish--;
-		return position;
-	}
-	// friend std::ostream& operator<<(std::ostream& out, My_vector& v) {
-	// 	for (iterator i = v.start; i < v.finish; i++)
-	// 		out << *i << ' ';
-	// 	out << '\n';
-	// 	return out;
-	// }
-	void display() const {
-		for (iterator i = start; i < finish; i++)
-	 		std::cout << *i << ' ';
-	 	std::cout << '\n';
-	}
+	iterator erase(iterator position);
+	friend std::ostream& operator << (std::ostream& out, const My_vector& v);  // for test
 };
 
 #endif

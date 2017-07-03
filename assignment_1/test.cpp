@@ -1,20 +1,34 @@
 #include "set.h"
+#include "llrb.h"
 #include "priority_queue.h"
+#include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 
 int main() {
+
 	// TESTING CODE WILL BE PUT HERE
-	Priority_queue q;
-	for (int i = 0; i < 10; i++) {
-		q.push(i);
+	srand((unsigned)time(NULL));
+	Rb_tree my_tree;
+	for (int i = 0; i < 100; i++) {
+		my_tree.insert(rand()%20);
+		cout << my_tree.size() << ' ';
 	}
-	q.display();
-	My_vector vec;
-	for (int i = 0; i < 10; i++) {
-		vec.push_back(q.top());
+/*	My_vector v;
+	// T v[1000000];
+	for (int i = 0; i < 1000000; i++) {
+		v.push_back(rand()%1000); // *(v+i) = rand()%1000;
+	}
+	Priority_queue q(v.begin(), v.end()); //(v, v+1000000);
+	cout << q;
+	// vec;
+	for (int i = 0; i < 1000000; i++) {
+		// vec.push_back(q.top());
+		cout << q.top() << ' ';
 		q.pop();
 	}
-	vec.display();
+	// cout << vec;
 	return 0;
+*/
 }
