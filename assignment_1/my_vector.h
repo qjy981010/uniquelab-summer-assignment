@@ -26,7 +26,7 @@ public:
 	~My_vector() { delete []start; }
 	reference front() { return *begin(); }
 	reference back() { return *(end()-1); }
-	void push_back(const T& x)
+	void push_back(const T& x);
 	void pop_back() { finish--; }
 	iterator erase(iterator position);
 	friend std::ostream& operator << (std::ostream& out, const My_vector& v);  // for test

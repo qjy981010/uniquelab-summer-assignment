@@ -4,13 +4,13 @@ using namespace std;
 
 My_vector::My_vector() {
 	start = new T[16];
-	finish = start;
+	My_vector::finish = start;
 	end_of_storage = start + 16;
 }
 
 void My_vector::insert_aux(const T& x) {
 	size_type size_ = size();
-	iterator newstart = new T[size_<<1];
+	My_vector::iterator newstart = new T[size_<<1];
 	for (int i = 0 ; i < size_; i++) {
 		*(newstart + i) = *(start + i);
 	}
@@ -30,7 +30,7 @@ std::ostream& operator<<(std::ostream& out, const My_vector& v) {
 }
 
 
-void push_back(const T& x) {
+void My_vector::push_back(const T& x) {
 	if (finish != end_of_storage) {
 		*finish = x;
 		finish++;
@@ -40,7 +40,7 @@ void push_back(const T& x) {
 }
 
 
-iterator erase(iterator position) {
+My_vector::iterator My_vector::erase(iterator position) {
 	for (; position + 1 != finish; position++)
 		*position = *( position + 1 );
 	finish--;

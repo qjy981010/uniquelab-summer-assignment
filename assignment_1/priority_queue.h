@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <vector>
 #include "my_vector.h"
 
 using T = double;
