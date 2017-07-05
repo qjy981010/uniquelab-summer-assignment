@@ -30,17 +30,15 @@ private:
 	void flipColors(base_ptr h);
 	color_type isRed(base_ptr h) {
 		if ( h ) return h->color == RED;
-		else return 0;
+		else return BLANK;
 	};
 	void deltree(base_ptr h);
 	base_ptr fixUp(base_ptr h);
 	base_ptr delMin(base_ptr h);
 	base_ptr delMin(base_ptr h, base_ptr head);
-	base_ptr delMax(base_ptr h, base_ptr head);
 	base_ptr put(base_ptr h, T val);
 	base_ptr erase(base_ptr h, const T& element);
 	void popRightMin(base_ptr h);
-	void popLeftMax(base_ptr h);
 public:
 	~Rb_tree();
 	size_type size() const { return N; }

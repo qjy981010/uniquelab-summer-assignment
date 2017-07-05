@@ -3,12 +3,12 @@
 using namespace std;
 
 My_vector::My_vector() {
-	start = new T[16];
+	start = new T[16]; // 初始空间设为16
 	My_vector::finish = start;
 	end_of_storage = start + 16;
 }
 
-void My_vector::insert_aux(const T& x) {
+void My_vector::insert_aux(const T& x) { // 分配新空间，转移并delete原空间
 	size_type size_ = size();
 	My_vector::iterator newstart = new T[size_<<1];
 	for (int i = 0 ; i < size_; i++) {
@@ -35,7 +35,7 @@ void My_vector::push_back(const T& x) {
 		*finish = x;
 		finish++;
 	}
-	else
+	else // vector容量已满
 		insert_aux(x);
 }
 

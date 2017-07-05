@@ -18,7 +18,7 @@ Rb_tree::base_ptr Rb_tree::rotateLeft(base_ptr h) {
 	h->right = x->left;
 	x->left = h;
 	x->color = h->color;
-	h->color = RED;
+	h->color = RED; // 旋转时x的颜色一定是红的，下同
 	return x;
 }
 
@@ -31,7 +31,7 @@ Rb_tree::base_ptr Rb_tree::rotateRight(base_ptr h) {
 	return x;
 }
 
-void Rb_tree::flipColors(base_ptr h) {
+void Rb_tree::flipColors(base_ptr h) { // 颠倒颜色
 	h->color = !h->color;
 	h->right->color = !h->right->color;
 	h->left->color = !h->left->color;
@@ -51,7 +51,7 @@ Rb_tree::base_ptr Rb_tree::put(base_ptr h, T val) {
 	}
 	if (val > h->val) h->right = put(h->right, val);
 	else if (val < h->val) h->left = put(h->left, val);
-	else return h;
+	else return h; // 因为是集合，相等时不插入
 	if ( !isRed(h->left) && isRed(h->right) )
 		h = rotateLeft(h);
 	if ( isRed(h->left) && isRed(h->left->left) )
@@ -66,10 +66,11 @@ void Rb_tree::clear() {
 	deltree(root->left);
 	deltree(root->right);
 	root = 0;
+	N = 0;
 }
 
 Rb_tree::base_ptr Rb_tree::fixUp(base_ptr h) {
-	if (isRed(h->right)) h = rotateLeft(h);
+	if (isRed(h->right)) h = rotateLeft(h); //此时右边为红，左边一定为黑， 所以这里不用再判断左边颜色
 	if (isRed(h->left) && isRed(h->left->left)) h = rotateRight(h);
 	if (isRed(h->left) && isRed(h->right)) flipColors(h);
 	return h;
@@ -80,7 +81,8 @@ Rb_tree::base_ptr Rb_tree::moveRedLeft(base_ptr h) {
 	if (isRed(h->right->left)) {
 		h->right = rotateRight(h->right);
 		h = rotateLeft(h);
-		flipColors(h);
+		// flipColors(h);         //这行代码有没有都行，有的话就是在向下递归时flipColors
+		//没有的话在向上递归时会fixUp回去，下个函数也是一样；
 	}
 	return h;
 }
@@ -89,7 +91,7 @@ Rb_tree::base_ptr Rb_tree::moveRedRight(base_ptr h) {
 	flipColors(h);
 	if (isRed(h->left->left)) {
 		h = rotateRight(h);
-		flipColors(h);
+		// flipColors(h);
 	}
 	return h;
 }
@@ -107,10 +109,10 @@ Rb_tree::base_ptr Rb_tree::delMin(base_ptr h) {
 }
 
 void Rb_tree::eraseMin() {
-	if ( !isRed(root->right) && !isRed(root->left) )
+	if ( !isRed(root->right) && !isRed(root->left) ) // 先把root置红
 		root->color = RED;
 	root = delMin(root);
-	if (root) root->color = BLANK;
+	if (root) root->color = BLANK; // 把root颜色改回来，下同
 	N--;
 }
 
@@ -120,20 +122,21 @@ Rb_tree::base_ptr Rb_tree::erase(base_ptr h, const T& element) {
 			h = moveRedLeft(h);
 		h->left = erase(h->left, element);
 	}
-	else {
-		if (isRed(h->left)) h = rotateRight(h);
+	else { // 此为大于或等于的情况
+		if (isRed(h->left)) h = rotateRight(h); // 大于或者等于时都需先执行此行
+		// 如果右边有红节点，则右旋，把等于转为大于继续递归
 		if (element > h->val) {
 			if (!isRed(h->right) && !isRed(h->right->left))
 				h = moveRedRight(h);
 			h->right = erase(h->right, element);
 		}
 		else {
-			if (h->right==nullptr) {
+			if (h->right==nullptr) { // 右边为空时左边必为空
 				delete h;
 				return nullptr;
 			}
 			else {
-				popRightMin(h);
+				popRightMin(h); // 左右不为空时，将右子树的最小值换上来
 			}
 		}
 	}
@@ -148,7 +151,7 @@ void Rb_tree::erase(const T& element) {
 	N--;
 }
 
-int Rb_tree::count(const T& element) const{
+int Rb_tree::count(const T& element) const{ // 结果只有1和0
 	base_ptr h = root;
 	while (h) {
 		if (element < h->val) h = h->left;
@@ -158,7 +161,7 @@ int Rb_tree::count(const T& element) const{
 	return 0;
 }
 
-void Rb_tree::popRightMin(base_ptr h) {
+void Rb_tree::popRightMin(base_ptr h) { // 找到h右边最小值替换h并删除那个最小节点
 	base_ptr its_right = h->right;
 	color_type its_color = h->color;
 	if ( !isRed(its_right->right) && !isRed(its_right->left) )
@@ -179,26 +182,9 @@ Rb_tree::base_ptr Rb_tree::delMin(base_ptr h, base_ptr head) {
 	return fixUp(h);
 }
 
-/*
-void Rb_tree::popLeftMax(base_ptr h) {
-	base_ptr its_left = h->left;
-	color_type its_color = h->color;
-	if ( !isRed(its_left->right) && !isRed(its_left->left) )
-		its_color = RED;
-	its_left = delMax(its_left, h);
-	if (its_left) its_left->color = its_color;
-}
-
-Rb_tree::base_ptr Rb_tree::delMax(base_ptr h, base_ptr head) {
-	if (isRed(h->left)) h = rotateRight(h);
-	if (!h->right) {
-		head->val = h->val;
-		delete h;
-		return nullptr;
-	}
-	if (!isRed(h->right) && !isRed(h->right->left))
-		h = moveRedRight(h);
-	h->right = delMax(h->right, head);
-	return fixUp(h);
-}
-*/
+/* 技巧笔记：
+1.可以在每个节点加入parent指针，然后定义header节点，
+header与root互为父节点，header的左指针指向树的最小节点，
+右指针指向树的最大节点，可以方便找到最小最大节点；
+2.还可以在每个节点加入sub_tree_size，
+在需要实现数出某个范围内节点个数时很有用；

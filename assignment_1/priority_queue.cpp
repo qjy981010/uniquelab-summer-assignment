@@ -3,7 +3,7 @@
 using namespace std;
 
 Priority_queue::Priority_queue(T* first, T* last) {
-	v.push_back(0);
+	v.push_back(0); // 首位储存其大小，初始设为0
 	for ( T* p = first; p < last; p++) {
 		push(*p);
 	}
@@ -12,9 +12,8 @@ Priority_queue::Priority_queue(T* first, T* last) {
 
 void Priority_queue::push(const T& val) {
 	v.push_back(val);
-	size_t size_ = ++v.front();
-	int i = size_;
-	for (int j = size_ >> 1; j>0 && i!=1 && v[i]>v[j]; i = j, j = i >> 1) {
+	int i = ++v.front();
+	for (int j = i >> 1; j>0 && i!=1 && v[i]>v[j]; i = j, j = i >> 1) {
 		swap(v[i], v[j]);
 	}
 }
@@ -22,7 +21,7 @@ void Priority_queue::push(const T& val) {
 
 void Priority_queue::pop() {
 
-	size_t size_ = --v.front();
+	size_t size_ = --v.front(); // 避免下面频繁调用front函数
 	// if ( size_ < 0 ) {
 	// 	v.front()++;
 	// 	cerr << "ERROR: Nothing in the Priority queue!";
