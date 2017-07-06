@@ -3,44 +3,32 @@
 #include "priority_queue.h"
 #include <stdlib.h>
 #include <time.h>
+#include <set>
 
 using namespace std;
 
 int main() {
-
-	// TESTING CODE WILL BE PUT HERE
-	srand((unsigned)time(NULL));
-	Rb_tree my_tree;
-	for (int i = 0; i < 100; i++) {
-		my_tree.insert(rand()%10);
-		cout << my_tree.size() << ' ';
-	}
-	cout << '\n';
-	for (int i = 9; i >= 0; i--) {
-		// my_tree.simpledisplay();
-		cout << my_tree.size() << ' ';
-		cout << my_tree.count(7) << ' ';
-		my_tree.erase(i);
-	}
-	cout << my_tree.empty();
-	cout << '\n';
-
-
-
-/*	My_vector v;
-	// T v[1000000];
-	for (int i = 0; i < 1000000; i++) {
-		v.push_back(rand()%1000); // *(v+i) = rand()%1000;
-	}
-	Priority_queue q(v.begin(), v.end()); //(v, v+1000000);
-	cout << q;
-	// vec;
-	for (int i = 0; i < 1000000; i++) {
-		// vec.push_back(q.top());
-		cout << q.top() << ' ';
-		q.pop();
-	}
-	// cout << vec;
-	return 0;
-*/
+    std::set<double> std_set;
+    Set custom_set;
+    for (int i = 1; i != 1000; ++i) {
+        long long num = (long long)rand()*1000;
+        num %=i;
+        cout << custom_set.count(num) << " " << std_set.count(num) << endl;
+        custom_set.insert((double) i);
+        std_set.insert((double) i);
+        cout << "1: " << custom_set.size() << " " << std_set.size() << endl;
+        custom_set.insert((double) (-i));
+        std_set.insert((double) (-i));
+        cout << "2: " << custom_set.size() << " " << std_set.size() << endl;
+        custom_set.erase((double)(num));
+        std_set.erase((double)(num));
+        cout << "3: num="<< num << "   " << custom_set.size() << " " << std_set.size() << endl;
+        cout << custom_set.count(num) << " " << std_set.count(num) << endl;
+        cout << endl;
+    }
+    // ASSERT_EQ(std_set.size(), custom_set.size());
+    // for (auto s:std_set) {
+    //     custom_set.erase(s);
+    // }
+    // ASSERT_EQ(custom_set.size(), 0);
 }
