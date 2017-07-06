@@ -7,7 +7,7 @@ int Hashtable::hash_func(KT key) { // 简单的哈希函数，能处理std::stri
    int b     = 378551;
    int a     = 63689;
    long hash = 0;
-   for(int i = 0; i < key.length(); i++)
+   for(int i = 0; i != key.length(); i++)
    {
       hash = hash * a + key[i];
       a    = a * b;

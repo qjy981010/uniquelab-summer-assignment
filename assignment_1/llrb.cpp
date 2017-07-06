@@ -9,10 +9,6 @@ void Rb_tree::deltree(base_ptr h) {
 	delete h;
 }
 
-Rb_tree::Rb_tree() {
-	tail->color = BLANK;
-}
-
 Rb_tree::~Rb_tree() {
  	deltree(root);
 }
@@ -36,9 +32,9 @@ Rb_tree::base_ptr Rb_tree::rotateRight(base_ptr h) {
 }
 
 void Rb_tree::flipColors(base_ptr h) { // 颠倒颜色
-	h->color = !h->color;
 	if (h->right) h->right->color = !h->right->color;
 	if (h->left) h->left->color = !h->left->color;
+	h->color = !h->color;
 }
 
 void Rb_tree::insert(const T& element) {
@@ -55,7 +51,7 @@ Rb_tree::base_ptr Rb_tree::put(base_ptr h, T val) {
 	}
 	if (val > h->val) h->right = put(h->right, val);
 	else if (val < h->val) h->left = put(h->left, val);
-	else return h; // 因为是集合，相等时不插入
+	else return h; // 因为是为了实现集合，相等时不插入
 	if ( !isRed(h->left) && isRed(h->right) )
 		h = rotateLeft(h);
 	if ( isRed(h->left) && isRed(h->left->left) )
@@ -100,7 +96,7 @@ Rb_tree::base_ptr Rb_tree::moveRedRight(base_ptr h) {
 	return h;
 }
 
-Rb_tree::base_ptr Rb_tree::delMin(base_ptr h) {
+Rb_tree::base_ptr Rb_tree::eraseMin(base_ptr h) { // 递归下降，返回时调整
 	if (!h->left) {
 		delete h;
 		return nullptr;
@@ -108,14 +104,14 @@ Rb_tree::base_ptr Rb_tree::delMin(base_ptr h) {
 	if (!isRed(h->left) && !isRed(h->left->left)) {
 		h = moveRedLeft(h);
 	}
-	h->left = delMin(h->left);
+	h->left = eraseMin(h->left);
 	return fixUp(h);
 }
 
 void Rb_tree::eraseMin() {
 	if ( !isRed(root->right) && !isRed(root->left) ) // 先把root置红
 		root->color = RED;
-	root = delMin(root);
+	root = eraseMin(root);
 	if (root) root->color = BLANK; // 把root颜色改回来，下同
 	N--;
 }

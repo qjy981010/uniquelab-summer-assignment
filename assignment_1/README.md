@@ -8,4 +8,4 @@ UniqueLab Summer Camp Assignment 0
 
 **所有接口以及功能参照 STL 文档**
 
-本次任务时间仅一周，且部分新人C++需要重头学，因此无需实现迭代器, 大多数函数返回值改为void.
+其中priority_queue的底层用自己写的简单的vector实现

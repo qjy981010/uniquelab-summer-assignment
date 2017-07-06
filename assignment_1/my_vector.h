@@ -1,8 +1,6 @@
 #ifndef _MY_VECTOR_H
 #define _MY_VECTOR_H
 
-#include <iostream>
-
 using T = double;
 
 class My_vector {
@@ -10,7 +8,7 @@ public:
 	typedef T value_type;
 	typedef value_type* iterator;
 	typedef value_type& reference;
-	typedef std::size_t size_type;
+	typedef unsigned size_type;
 protected:
 	iterator start;
 	iterator finish;
@@ -27,9 +25,8 @@ public:
 	reference front() { return *begin(); }
 	reference back() { return *(end()-1); }
 	void push_back(const T& x);
-	void pop_back() { finish--; }
+	void pop_back() { finish--; } // 直接将finish后移一位即可
 	iterator erase(iterator position);
-	friend std::ostream& operator << (std::ostream& out, const My_vector& v);  // for test
 };
 
 #endif

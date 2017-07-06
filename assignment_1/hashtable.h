@@ -25,7 +25,7 @@ public:
 	void insert(KT key, T val);
 	void erase(KT key);
 	Hashtable() {
-		for (char i = 0; i < 37; i++) buckets.push_back((base_ptr) 0);
+		for (char i = 0; i != 37; i++) buckets.push_back((base_ptr) 0);
 	}
 private:
 	size_type size = 37;
