@@ -52,7 +52,7 @@ Rb_tree::base_ptr Rb_tree::put(base_ptr h, T val) {
 	if (val > h->val) h->right = put(h->right, val);
 	else if (val < h->val) h->left = put(h->left, val);
 	else return h; // 因为是为了实现集合，相等时不插入
-	if ( !isRed(h->left) && isRed(h->right) )
+	if ( !isRed(h->left) && isRed(h->right) ) // 返回时修复
 		h = rotateLeft(h);
 	if ( isRed(h->left) && isRed(h->left->left) )
 		h = rotateRight(h);
@@ -178,5 +178,5 @@ Rb_tree::base_ptr Rb_tree::delMin(base_ptr h, base_ptr head) {
 header与root互为父节点，header的左指针指向树的最小节点，
 右指针指向树的最大节点，可以方便找到最小最大节点；
 2.还可以在每个节点加入sub_tree_size，
-在需要实现数出某个范围内节点个数时很有用；
+在需要实现基于范围的查询时很有用；
 */
