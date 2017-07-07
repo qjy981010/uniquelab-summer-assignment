@@ -5,15 +5,16 @@
 using T = double;
 
 class Set {
-public:
-	void insert(const T& element) { tree.insert(element); }
-	void erase(const T& element) { tree.erase(element); }
-	void clear() { tree.clear(); }
-	int count(const T& element) const { return tree.count(element); };
-	bool empty() { return tree.empty(); }
-	size_t size() { return tree.size(); }
-private:
-	Rb_tree tree;
+	public:
+		void insert(const T& element); // 插入元素
+		void erase(const T& element); // 删除元素
+		void clear(); // 清空集合
+		int count(const T& element) const; // 计算element个数
+		bool empty(); // 判断是否为空
+		unsigned size(); // 返回集合大小
+
+	private:
+		Rb_tree tree;
 };
 
 // TODO

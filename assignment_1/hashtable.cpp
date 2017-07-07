@@ -3,6 +3,16 @@
 
 using namespace std;
 
+Hashtable::Hashtable() {
+	for (char i = 0; i != 37; i++)
+		buckets.push_back((base_ptr) 0);
+}
+
+Hashtable::Hash_node(KT _key, T _val) {
+	key = _key;
+	val = _val;
+}
+
 int Hashtable::hash_func(KT key) { // 简单的哈希函数，能处理std::string
    int b     = 378551;
    int a     = 63689;
@@ -46,10 +56,10 @@ void Hashtable::insert(KT key, T val) {
 }
 
 void Hashtable::resize() {
-	size_type oldsize = size;
+	unsigned oldsize = size;
 	size = size_list[++size_index];
 	vector<base_ptr> tmp(size, (base_ptr) 0); // 新的vector
-	for (size_type bucket = 0; bucket < oldsize; ++bucket) {
+	for (unsigned bucket = 0; bucket < oldsize; ++bucket) {
 		base_ptr first = buckets[bucket];
 		while (first) { //重整vector时，每次将原节点插入新vector对应的bucket的最前端，避免了对bucket的遍历
 			int new_bucket = hash_func(first->key);

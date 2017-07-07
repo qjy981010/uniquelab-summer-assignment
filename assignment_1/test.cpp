@@ -1,6 +1,7 @@
 #include "set.h"
 #include "llrb.h"
 #include "priority_queue.h"
+
 #include <stdlib.h>
 #include <time.h>
 #include <set>
@@ -26,9 +27,4 @@ int main() {
         cout << custom_set.count(num) << " " << std_set.count(num) << endl;
         cout << endl;
     }
-    // ASSERT_EQ(std_set.size(), custom_set.size());
-    // for (auto s:std_set) {
-    //     custom_set.erase(s);
-    // }
-    // ASSERT_EQ(custom_set.size(), 0);
 }

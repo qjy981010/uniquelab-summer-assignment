@@ -2,7 +2,12 @@
 
 using namespace std;
 
-void Rb_tree::deltree(base_ptr h) {
+Rb_tree::color_type Rb_tree::isRed(base_ptr h) {
+	if ( h ) return color_type(h->color == RED);
+	else return BLANK; // 叶节点为黑
+};
+
+void Rb_tree::deltree(base_ptr h) { // 递归删除树h
 	if (!h) return;
 	deltree(h->left);
 	deltree(h->right);
@@ -11,6 +16,14 @@ void Rb_tree::deltree(base_ptr h) {
 
 Rb_tree::~Rb_tree() {
  	deltree(root);
+}
+
+unsigned Rb_tree::size() const {
+	return N;
+}
+
+bool Rb_tree::empty() const {
+	return N == 0;
 }
 
 Rb_tree::base_ptr Rb_tree::rotateLeft(base_ptr h) {
@@ -32,9 +45,9 @@ Rb_tree::base_ptr Rb_tree::rotateRight(base_ptr h) {
 }
 
 void Rb_tree::flipColors(base_ptr h) { // 颠倒颜色
-	if (h->right) h->right->color = !h->right->color;
-	if (h->left) h->left->color = !h->left->color;
-	h->color = !h->color;
+	if (h->right) h->right->color = (color_type) !h->right->color;
+	if (h->left) h->left->color = (color_type) !h->left->color;
+	h->color = (color_type) !h->color;
 }
 
 void Rb_tree::insert(const T& element) {
@@ -43,7 +56,7 @@ void Rb_tree::insert(const T& element) {
 }
 
 Rb_tree::base_ptr Rb_tree::put(base_ptr h, T val) {
-	if ( h == 0 ) {
+	if ( h == nullptr ) {
 		N++;
 		base_ptr node_t = new __rb_tree_node_base;
 		node_t->val = val;
@@ -65,7 +78,7 @@ void Rb_tree::clear() {
 	if (!root) return;
 	deltree(root->left);
 	deltree(root->right);
-	root = 0;
+	root = nullptr;
 	N = 0;
 }
 
@@ -117,7 +130,7 @@ void Rb_tree::eraseMin() {
 }
 
 Rb_tree::base_ptr Rb_tree::erase(base_ptr h, const T& element) {
-	if (!h) return 0;
+	if (!h) return nullptr;
 	if (element < h->val) {
 		if (!isRed(h->left) && h->left && !isRed(h->left->left))
 			h = moveRedLeft(h);

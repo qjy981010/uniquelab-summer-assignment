@@ -1,32 +1,31 @@
-#ifndef _MY_VECTOR_H
-#define _MY_VECTOR_H
+#ifndef MY_VECTOR_H_
+#define MY_VECTOR_H_
 
 using T = double;
 
-class My_vector {
-public:
-	typedef T value_type;
-	typedef value_type* iterator;
-	typedef value_type& reference;
-	typedef unsigned size_type;
-protected:
-	iterator start;
-	iterator finish;
-	iterator end_of_storage;
-	void insert_aux(const T& x);
-public:
-	iterator begin() const { return start; }
-	iterator end() const { return finish; }
-	size_type size() const { return size_type(end()-begin()); }
-	bool empty() const {return begin() == end(); }
-	reference operator[](size_type n) { return *(begin() + n); }
-	My_vector();
-	~My_vector() { delete []start; }
-	reference front() { return *begin(); }
-	reference back() { return *(end()-1); }
-	void push_back(const T& x);
-	void pop_back() { finish--; } // 直接将finish后移一位即可
-	iterator erase(iterator position);
+class My_vector
+{
+	public:
+		My_vector();
+		~My_vector();
+		T* begin() const; // 指向首节点的指针
+		T* end() const; // 指向尾节点的指针
+		T& front() const; // 首节点值
+		T& back() const; // 尾节点值
+		unsigned size() const; // 返回大小
+		bool empty() const; // 判断是否为空
+		void push_back(const T& x); // 在尾部添加元素
+		void pop_back(); // 删除尾部元素
+		T* erase(T* position); // 删除任意元素
+		T& operator[](unsigned n) {
+			return *(begin() + n);
+		}
+
+	protected:
+		T* start;
+		T* finish;
+		T* end_of_storage;
+		void insert_aux(const T& x);
 };
 
 #endif

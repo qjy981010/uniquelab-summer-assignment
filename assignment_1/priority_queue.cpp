@@ -1,7 +1,12 @@
 #include "priority_queue.h"
+
 #include <iostream>
 
 using std::cerr;
+
+Priority_queue::Priority_queue() {
+	v.push_back(0);
+} // 首位储存其大小，初始设为0；实际数据从第二个开始
 
 Priority_queue::Priority_queue(T* first, T* last) {
 	v.push_back(0); // 首位储存其大小，初始设为0；实际数据从第二个开始
@@ -10,6 +15,17 @@ Priority_queue::Priority_queue(T* first, T* last) {
 	}
 }
 
+bool Priority_queue::empty() const {
+	return v.front() == 0;
+}
+
+unsigned Priority_queue::size() const {
+	return v.front();
+}
+
+const T& Priority_queue::top() const {
+	return *( v.begin() + 1 );
+}
 
 void Priority_queue::push(const T& val) { // 向堆中插入；
 	v.push_back(val);
@@ -18,7 +34,6 @@ void Priority_queue::push(const T& val) { // 向堆中插入；
 		std::swap(v[i], v[j]);
 	}
 }
-
 
 void Priority_queue::pop() {
 	if (empty()) cerr << "ERROR: The Priority_queue is empty.\n";
