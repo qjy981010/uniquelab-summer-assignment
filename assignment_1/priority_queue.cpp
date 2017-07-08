@@ -1,6 +1,7 @@
 #include "priority_queue.h"
 
 #include <iostream>
+#include <algorithm>
 
 using std::cerr;
 
@@ -24,7 +25,7 @@ unsigned Priority_queue::size() const {
 }
 
 const T& Priority_queue::top() const {
-	return *( v.begin() + 1 );
+	return v[1];
 }
 
 void Priority_queue::push(const T& val) { // 向堆中插入；
@@ -36,7 +37,10 @@ void Priority_queue::push(const T& val) { // 向堆中插入；
 }
 
 void Priority_queue::pop() {
-	if (empty()) cerr << "ERROR: The Priority_queue is empty.\n";
+	if (empty()) {
+		cerr << "ERROR: The Priority_queue is empty.\n";
+		return;
+	}
 	unsigned size_ = --v.front();
 	*( v.begin() + 1 ) = v.back(); // 把最后的元素赋值给堆顶
 	v.pop_back(); // 删除最后的元素，相当于把最后的元素移至堆顶

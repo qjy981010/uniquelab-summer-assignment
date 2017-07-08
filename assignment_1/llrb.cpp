@@ -1,13 +1,11 @@
 #include "llrb.h"
 
-using namespace std;
-
-Rb_tree::color_type Rb_tree::isRed(base_ptr h) {
+Rb_tree::color_type Rb_tree::isRed(Base_ptr h) {
 	if ( h ) return color_type(h->color == RED);
-	else return BLANK; // 叶节点为黑
+	else return BLACK; // 叶节点为黑
 };
 
-void Rb_tree::deltree(base_ptr h) { // 递归删除树h
+void Rb_tree::deltree(Base_ptr h) { // 递归删除树h
 	if (!h) return;
 	deltree(h->left);
 	deltree(h->right);
@@ -26,8 +24,8 @@ bool Rb_tree::empty() const {
 	return N == 0;
 }
 
-Rb_tree::base_ptr Rb_tree::rotateLeft(base_ptr h) {
-	base_ptr x = h->right;
+Rb_tree::Base_ptr Rb_tree::rotateLeft(Base_ptr h) {
+	Base_ptr x = h->right;
 	h->right = x->left;
 	x->left = h;
 	x->color = h->color;
@@ -35,8 +33,8 @@ Rb_tree::base_ptr Rb_tree::rotateLeft(base_ptr h) {
 	return x;
 }
 
-Rb_tree::base_ptr Rb_tree::rotateRight(base_ptr h) {
-	base_ptr x = h->left;
+Rb_tree::Base_ptr Rb_tree::rotateRight(Base_ptr h) {
+	Base_ptr x = h->left;
 	h->left = x->right;
 	x->right = h;
 	x->color = h->color;
@@ -44,7 +42,7 @@ Rb_tree::base_ptr Rb_tree::rotateRight(base_ptr h) {
 	return x;
 }
 
-void Rb_tree::flipColors(base_ptr h) { // 颠倒颜色
+void Rb_tree::flipColors(Base_ptr h) { // 颠倒颜色
 	if (h->right) h->right->color = (color_type) !h->right->color;
 	if (h->left) h->left->color = (color_type) !h->left->color;
 	h->color = (color_type) !h->color;
@@ -52,15 +50,15 @@ void Rb_tree::flipColors(base_ptr h) { // 颠倒颜色
 
 void Rb_tree::insert(const T& element) {
 	root = put(root, element);
-	root->color = BLANK;
+	root->color = BLACK;
 }
 
-Rb_tree::base_ptr Rb_tree::put(base_ptr h, T val) {
+Rb_tree::Base_ptr Rb_tree::put(Base_ptr h, T val) {
 	if ( h == nullptr ) {
 		N++;
-		base_ptr node_t = new __rb_tree_node_base;
-		node_t->val = val;
-		return node_t;
+		Base_ptr node_temp = new Node_base;
+		node_temp->val = val;
+		return node_temp;
 	}
 	if (val > h->val) h->right = put(h->right, val);
 	else if (val < h->val) h->left = put(h->left, val);
@@ -82,14 +80,14 @@ void Rb_tree::clear() {
 	N = 0;
 }
 
-Rb_tree::base_ptr Rb_tree::fixUp(base_ptr h) {
-	if (isRed(h->right)) h = rotateLeft(h); //此时右边为红，左边一定为黑， 所以这里不用再判断左边颜色
+Rb_tree::Base_ptr Rb_tree::fixUp(Base_ptr h) {
+	if (isRed(h->right)) h = rotateLeft(h);
 	if (isRed(h->left) && isRed(h->left->left)) h = rotateRight(h);
 	if (isRed(h->left) && isRed(h->right)) flipColors(h);
 	return h;
 }
 
-Rb_tree::base_ptr Rb_tree::moveRedLeft(base_ptr h) {
+Rb_tree::Base_ptr Rb_tree::moveRedLeft(Base_ptr h) {
 	flipColors(h);
 	if (h->right && isRed(h->right->left)) {
 		h->right = rotateRight(h->right);
@@ -100,7 +98,7 @@ Rb_tree::base_ptr Rb_tree::moveRedLeft(base_ptr h) {
 	return h;
 }
 
-Rb_tree::base_ptr Rb_tree::moveRedRight(base_ptr h) {
+Rb_tree::Base_ptr Rb_tree::moveRedRight(Base_ptr h) {
 	flipColors(h);
 	if (h->left && isRed(h->left->left)) {
 		h = rotateRight(h);
@@ -109,7 +107,7 @@ Rb_tree::base_ptr Rb_tree::moveRedRight(base_ptr h) {
 	return h;
 }
 
-Rb_tree::base_ptr Rb_tree::eraseMin(base_ptr h) { // 递归下降，返回时调整
+Rb_tree::Base_ptr Rb_tree::eraseMin(Base_ptr h) { // 递归下降，返回时调整
 	if (!h->left) {
 		delete h;
 		return nullptr;
@@ -125,11 +123,11 @@ void Rb_tree::eraseMin() {
 	if ( !isRed(root->right) && !isRed(root->left) ) // 先把root置红
 		root->color = RED;
 	root = eraseMin(root);
-	if (root) root->color = BLANK; // 把root颜色改回来，下同
+	if (root) root->color = BLACK; // 把root颜色改回来，下同
 	N--;
 }
 
-Rb_tree::base_ptr Rb_tree::erase(base_ptr h, const T& element) {
+Rb_tree::Base_ptr Rb_tree::erase(Base_ptr h, const T& element) {
 	if (!h) return nullptr;
 	if (element < h->val) {
 		if (!isRed(h->left) && h->left && !isRed(h->left->left))
@@ -161,11 +159,11 @@ void Rb_tree::erase(const T& element) {
 	if (!isRed(root->right) && !isRed(root->left))
 		root->color = RED;
 	root = erase(root, element);
-	if (root) root->color = BLANK;
+	if (root) root->color = BLACK;
 }
 
 int Rb_tree::count(const T& element) const{ // 结果只有1和0
-	base_ptr h = root;
+	Base_ptr h = root;
 	while (h) {
 		if (element < h->val) h = h->left;
 		else if (element > h->val) h = h->right;
@@ -174,15 +172,15 @@ int Rb_tree::count(const T& element) const{ // 结果只有1和0
 	return 0;
 }
 
-Rb_tree::base_ptr Rb_tree::delMin(base_ptr h, base_ptr head) {
+Rb_tree::Base_ptr Rb_tree::delMin(Base_ptr h, Base_ptr p) {
 	if (!h->left) {
-		head->val = h->val;
+		p->val = h->val;
 		delete h;
 		return nullptr;
 	}
 	if (!isRed(h->left) && !isRed(h->left->left))
 		h = moveRedLeft(h);
-	h->left = delMin(h->left, head);
+	h->left = delMin(h->left, p);
 	return fixUp(h);
 }
 
